@@ -1,0 +1,49 @@
+.wordmark {
+  position: relative;
+  margin: 0;
+  padding-block: 0.15em;
+  font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(2.1rem, 10.5vw, 9.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  user-select: none;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+}
+
+/* --p (0..1) is written per letter by useProximity: thin at rest, heavy and wide near the cursor. */
+.wordmark__char {
+  --p: 0;
+  display: inline-block;
+  font-weight: calc(220 + 680 * var(--p));
+  font-stretch: calc(78% + 47% * var(--p));
+  transform: translateY(calc(var(--p) * -0.05em));
+}
+
+.wordmark__char--tld {
+  color: transparent;
+  -webkit-text-stroke: max(1px, 0.018em) var(--ink);
+  transition: color var(--duration-slow) var(--ease-out-expo);
+}
+
+.wordmark:hover .wordmark__char--tld {
+  color: var(--ink);
+}
+
+.wordmark__rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: max(2px, 0.03em);
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.wordmark:hover .wordmark__rule {
+  transform: scaleX(1);
+  transform-origin: left;
+}

@@ -1,0 +1,45 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  will-change: transform;
+}
+
+.cursor__lens {
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 50%;
+  background: #fff;
+  transition:
+    scale var(--duration-slow) var(--ease-out-expo),
+    opacity var(--duration-normal) ease;
+}
+
+.cursor[data-active='false'] .cursor__lens {
+  opacity: 0;
+  scale: 0.3;
+}
+
+/* Over the wordmark the lens swells into an inverting magnifier. */
+.stage:has(.wordmark:hover) .cursor__lens {
+  scale: 5.5;
+}
+
+.stage:active .cursor__lens {
+  scale: 0.7;
+}
+
+.stage:has(.wordmark:hover):active .cursor__lens {
+  scale: 4.6;
+}
+
+@media not ((hover: hover) and (pointer: fine)) {
+  .cursor {
+    display: none;
+  }
+}
