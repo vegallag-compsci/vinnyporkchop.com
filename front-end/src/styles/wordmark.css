@@ -21,14 +21,76 @@
   transform: translateY(calc(var(--p) * -0.05em));
 }
 
+/* Intro states from useTypeIntro. Hidden slots keep their width so the word never reflows. */
+.wordmark__char[data-state='hidden'] {
+  visibility: hidden;
+}
+
+.wordmark__char[data-state='scrambled'] {
+  opacity: 0.45;
+}
+
+.wordmark__char[data-state='resolved'] {
+  animation: char-resolve 420ms var(--ease-out-expo);
+}
+
+@keyframes char-resolve {
+  from {
+    opacity: 0.3;
+    filter: blur(0.06em);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
 .wordmark__char--tld {
   color: transparent;
   -webkit-text-stroke: max(1px, 0.018em) var(--ink);
   transition: color var(--duration-slow) var(--ease-out-expo);
 }
 
-.wordmark:hover .wordmark__char--tld {
+.wordmark[data-done='true']:hover .wordmark__char--tld {
   color: var(--ink);
+}
+
+/* Zero-width so moving it between letters never shifts layout. */
+.wordmark__caret {
+  position: relative;
+  display: inline-block;
+  width: 0;
+}
+
+.wordmark__caret::after {
+  content: '';
+  position: absolute;
+  left: 0.03em;
+  bottom: -0.04em;
+  width: max(2px, 0.04em);
+  height: 0.78em;
+  background: var(--ink);
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+.wordmark__caret[data-done='true'] {
+  opacity: 0;
+  transition: opacity var(--duration-slow) ease 1.2s;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wordmark__char[data-state='resolved'] {
+    animation: none;
+  }
+  .wordmark__caret {
+    display: none;
+  }
 }
 
 .wordmark__rule {
@@ -43,7 +105,7 @@
   transition: transform var(--duration-slow) var(--ease-out-expo);
 }
 
-.wordmark:hover .wordmark__rule {
+.wordmark[data-done='true']:hover .wordmark__rule {
   transform: scaleX(1);
   transform-origin: left;
 }
